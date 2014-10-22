@@ -3,17 +3,24 @@
 class HomeController extends BaseController
 {
 
-	protected function getFromApi($method)
+	protected function getFromApi($method, $parameter = null)
 	{
 		$lifetime = 10;
 		$habr = new \Demo\HabrApi;
 
-		$cacheKey = 'habr.' . $method;
+		$cacheKey = 'habr.' . $method . $parameter;
 
 		$result = Cache::get($cacheKey);
+		$result = null;
 		if (is_null($result))
 		{
-			$result = $habr->$method();
+			if (is_null($parameter))
+			{
+				$result = $habr->$method();
+			} else
+			{
+				$result = $habr->$method($parameter);
+			}
 			Cache::put($cacheKey, $result, $lifetime);
 		}
 		return $result;
@@ -52,9 +59,12 @@ class HomeController extends BaseController
 		$users = $this->getFromApi('users');
 		$usersSource = $this->getMethodSource('users');
 
+		$search = $this->getFromApi('search', 'php');
+		$searchSource = $this->getMethodSource('search');
+
 		$get404 = $this->getFromApi('get404');
 
-		return View::make('index', compact('index', 'indexSource', 'live_broadcasts', 'live_broadcastsSource', 'first_live_broadcast', 'first_live_broadcastSource', 'users', 'usersSource', 'get404'));
+		return View::make('index', compact('index', 'indexSource', 'live_broadcasts', 'live_broadcastsSource', 'first_live_broadcast', 'first_live_broadcastSource', 'users', 'usersSource', 'get404', 'search', 'searchSource'));
 	}
 
 }

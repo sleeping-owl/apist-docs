@@ -10,11 +10,7 @@ class HabrApi extends Apist
 	public function index()
 	{
 		return $this->get('/', [
-			'title' => Apist::filter('.page_head')->exists()->then(
-				Apist::filter('.page_head .title')->text()->trim()
-			)->else(
-				'Title not found'
-			),
+			'title' => Apist::filter('.page_head')->exists()->then(Apist::filter('.page_head .title')->text()->trim())->else('Title not found'),
 			'posts' => Apist::filter('.posts .post')->each([
 				'title'      => Apist::filter('h1.title a')->text(),
 				'link'       => Apist::filter('h1.title a')->attr('href'),
@@ -52,7 +48,9 @@ class HabrApi extends Apist
 	{
 		$broadcasts = $this->live_broadcasts();
 		if (isset($broadcasts['error']))
+		{
 			return $broadcasts;
+		}
 		$url = $broadcasts['items'][0]['link'];
 		return $this->getPost($url);
 	}
@@ -95,6 +93,25 @@ class HabrApi extends Apist
 				'rating'   => Apist::filter('.rating')->text()->trim(),
 				'karma'    => Apist::filter('.karma')->text()->trim()
 			])
+		]);
+	}
+
+	public function search($query)
+	{
+		return $this->get('/search', [
+			'query'              => $query,
+			'publications_count' => Apist::filter('.menu .item:nth-child(1) span')->text()->intval(),
+			'hubs_count'         => Apist::filter('.menu .item:nth-child(2) span')->text()->intval(),
+			'users_count'        => Apist::filter('.menu .item:nth-child(3) span')->text()->intval(),
+			'comments_count'     => Apist::filter('.menu .item:nth-child(4) span')->text()->intval(),
+			'posts'              => Apist::filter('.post')->each([
+				'title'        => Apist::filter('.title a')->text(),
+				'link'         => Apist::filter('.title a')->attr('href'),
+				'published_at' => Apist::filter('.published')->text(),
+				'content'      => Apist::filter('.content')->html()
+			])
+		], [
+			'query' => ['q' => $query]
 		]);
 	}
 

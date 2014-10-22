@@ -219,6 +219,11 @@ $result = $api->index();</code></pre>
 			'source' => $usersSource,
 			'data' => $users
 		])
+		@include('example', [
+			'title' => 'Habrahabr search: "php"',
+			'source' => $searchSource,
+			'data' => $search
+		])
 	</div>
 
 	<div class="well container footer text-right">
