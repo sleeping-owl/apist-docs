@@ -135,8 +135,6 @@ $result = $api->index();</code></pre>
 		<h4>Error Handling</h4>
 		<p>If there was an error during request your response data will look like:</p>
 		<pre><code class="language-json">{{{ json_encode($get404, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}}</code></pre>
-		<p>or like:</p>
-		<pre><code class="language-json">{{{ json_encode($getCurlError, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}}</code></pre>
 		<h4>Blueprint</h4>
 		<p>Blueprint represents structure you want to get from api call.
 			It can be array or single <code>Apist::filter()</code> object.

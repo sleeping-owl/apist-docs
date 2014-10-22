@@ -36,11 +36,6 @@ class HabrApi extends Apist
 		return $this->get('/unknown-page', 'this-will-be-ignored');
 	}
 
-	public function getCurlError()
-	{
-		return $this->get('http://wrong-host.dev/', 'this-will-be-ignored');
-	}
-
 	public function live_broadcasts()
 	{
 		return $this->get('/', [
@@ -56,6 +51,8 @@ class HabrApi extends Apist
 	public function first_live_broadcast()
 	{
 		$broadcasts = $this->live_broadcasts();
+		if (isset($broadcasts['error']))
+			return $broadcasts;
 		$url = $broadcasts['items'][0]['link'];
 		return $this->getPost($url);
 	}

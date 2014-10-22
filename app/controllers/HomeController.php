@@ -53,9 +53,8 @@ class HomeController extends BaseController
 		$usersSource = $this->getMethodSource('users');
 
 		$get404 = $this->getFromApi('get404');
-		$getCurlError = $this->getFromApi('getCurlError');
 
-		return View::make('index', compact('index', 'indexSource', 'live_broadcasts', 'live_broadcastsSource', 'first_live_broadcast', 'first_live_broadcastSource', 'users', 'usersSource', 'get404', 'getCurlError'));
+		return View::make('index', compact('index', 'indexSource', 'live_broadcasts', 'live_broadcastsSource', 'first_live_broadcast', 'first_live_broadcastSource', 'users', 'usersSource', 'get404'));
 	}
 
 }
