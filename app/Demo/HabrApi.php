@@ -31,6 +31,16 @@ class HabrApi extends Apist
 		]);
 	}
 
+	public function get404()
+	{
+		return $this->get('/unknown-page', 'this-will-be-ignored');
+	}
+
+	public function getCurlError()
+	{
+		return $this->get('http://wrong-host.dev/', 'this-will-be-ignored');
+	}
+
 	public function live_broadcasts()
 	{
 		return $this->get('/', [

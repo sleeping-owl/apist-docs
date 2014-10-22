@@ -114,10 +114,29 @@ $result = $api->index();</code></pre>
 		<ol>
 			<li><strong>$url</strong> &mdash; url to use in query (relative to base url or absolute)</li>
 			<li><strong>$blueprint</strong> &mdash; array or single object parsing rules</li>
-			<li><strong>$options</strong> <small>(optional)</small> &mdash; any additional options to use in query.
-				For full list see <a href="http://guzzle.readthedocs.org/en/latest/clients.html#request-options">Guzzle documentation</a>.</li>
+			<li><strong>$options</strong> <small>(optional)</small> &mdash; any additional options to use in query.</li>
 		</ol>
-
+		<h4>Providing Get and Post parameters</h4>
+		<p>You can provide get parameters to the query in optional third <code>$options</code> parameter:</p>
+		<pre><code class="language-php">$this->get('/', ..., [
+  'query' => [
+    'parameter1' => 'value1',
+    'parameter2' => 'value2',
+  ]
+])</code></pre>
+		<p>Also you can provide post parameters to the query:</p>
+		<pre><code class="language-php">$this->post('/', ..., [
+  'body' => [
+    'parameter1' => 'value1',
+    'parameter2' => 'value2',
+  ]
+])</code></pre>
+		<p>Also you can specify headers and request configuration. For full documentation visit <a href="http://guzzle.readthedocs.org/en/latest/clients.html#request-options">Guzzle docs</a>.</p>
+		<h4>Error Handling</h4>
+		<p>If there was an error during request your response data will look like:</p>
+		<pre><code class="language-json">{{{ json_encode($get404, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}}</code></pre>
+		<p>or like:</p>
+		<pre><code class="language-json">{{{ json_encode($getCurlError, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}}</code></pre>
 		<h4>Blueprint</h4>
 		<p>Blueprint represents structure you want to get from api call.
 			It can be array or single <code>Apist::filter()</code> object.
