@@ -1,0 +1,69 @@
+body {
+	padding-top: 70px;
+}
+
+.lead-top {
+	margin-top: 1em;
+}
+
+.navbar {
+	border-radius: 0;
+}
+
+.navbar-inverse .navbar-brand-active {
+	color: #ffffff;
+}
+
+.bb-code {
+	font-family: "Courier";
+	font-size: 1.2em;
+}
+
+.bb-code-string {
+	color: #3276b1;
+}
+
+.code-leader {
+	font-weight: bold;
+}
+
+.bb-code-small {
+	font-size: 0.9em;
+}
+
+.bb-alert {
+	position: fixed;
+	bottom: 25%;
+	right: 0;
+	margin-bottom: 0;
+	font-size: 1.2em;
+	padding: 1em 1.3em;
+	z-index: 2000;
+}
+
+.alert--finch {
+	display: block;
+	font-weight: bold;
+	text-align: center;
+}
+
+.footer {
+	margin-top: 30px;
+}
+
+.example {
+	height: 300px;
+}
+
+.page-header {
+	position: relative;
+}
+
+.fix-navbar-fixed {
+	position: absolute;
+	top: -70px;
+}
+
+.hidden-common {
+	display: none;
+}
