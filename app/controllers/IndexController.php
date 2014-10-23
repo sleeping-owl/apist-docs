@@ -1,6 +1,6 @@
 <?php
 
-class HomeController extends BaseController
+class IndexController extends \Controller
 {
 
 	protected function getFromApi($method, $parameter = null)
@@ -11,7 +11,6 @@ class HomeController extends BaseController
 		$cacheKey = 'habr.' . $method . $parameter;
 
 		$result = Cache::get($cacheKey);
-		$result = null;
 		if (is_null($result))
 		{
 			if (is_null($parameter))
@@ -45,26 +44,23 @@ class HomeController extends BaseController
 		return implode("\n", $lines);
 	}
 
-	public function showWelcome()
+	public function getIndex()
 	{
-		$index = $this->getFromApi('index');
-		$indexSource = $this->getMethodSource('index');
+		return View::make('index');
+	}
 
-		$live_broadcasts = $this->getFromApi('live_broadcasts');
-		$live_broadcastsSource = $this->getMethodSource('live_broadcasts');
+	public function getApiCall($method)
+	{
+		if ( ! method_exists('\Demo\HabrApi', $method)) $method = 'index';
+		$parameter = ($method === 'search') ? 'php' : null;
+		$data = $this->getFromApi($method, $parameter);
+		return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+	}
 
-		$first_live_broadcast = $this->getFromApi('first_live_broadcast');
-		$first_live_broadcastSource = $this->getMethodSource('first_live_broadcast') . "\n\n" . $this->getMethodSource('getPost');
-
-		$users = $this->getFromApi('users');
-		$usersSource = $this->getMethodSource('users');
-
-		$search = $this->getFromApi('search', 'php');
-		$searchSource = $this->getMethodSource('search');
-
-		$get404 = $this->getFromApi('get404');
-
-		return View::make('index', compact('index', 'indexSource', 'live_broadcasts', 'live_broadcastsSource', 'first_live_broadcast', 'first_live_broadcastSource', 'users', 'usersSource', 'get404', 'search', 'searchSource'));
+	public function getSource($method)
+	{
+		if ( ! method_exists('\Demo\HabrApi', $method)) $method = 'index';
+		return $this->getMethodSource($method);
 	}
 
 }

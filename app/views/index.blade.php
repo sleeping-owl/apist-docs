@@ -93,7 +93,7 @@ class HabrApi extends Apist
 $result = $api->index();</code></pre>
 
 		<p>Result will be:</p>
-		<pre class="example"><code class="language-json">{{{ json_encode($index, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}}</code></pre>
+		<pre class="example"><code class="language-json" data-call="index"></code></pre>
 
 
 		<div class="page-header">
@@ -134,7 +134,7 @@ $result = $api->index();</code></pre>
 		<p>Also you can specify headers and request configuration. For full documentation visit <a href="http://guzzle.readthedocs.org/en/latest/clients.html#request-options">Guzzle docs</a>.</p>
 		<h4>Error Handling</h4>
 		<p>If there was an error during request your response data will look like:</p>
-		<pre><code class="language-json">{{{ json_encode($get404, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}}</code></pre>
+		<pre><code class="language-json" data-call="get404"></code></pre>
 		<h4>Blueprint</h4>
 		<p>Blueprint represents structure you want to get from api call.
 			It can be array or single <code>Apist::filter()</code> object.
@@ -201,28 +201,23 @@ $result = $api->index();</code></pre>
 
 		@include('example', [
 			'title' => 'Habrahabr index',
-			'source' => $indexSource,
-			'data' => $index
+			'method' => 'index'
 		])
 		@include('example', [
 			'title' => 'Habrahabr live broadcasts',
-			'source' => $live_broadcastsSource,
-			'data' => $live_broadcasts
+			'method' => 'live_broadcasts'
 		])
 		@include('example', [
 			'title' => 'Habrahabr first live broadcast post',
-			'source' => $first_live_broadcastSource,
-			'data' => $first_live_broadcast
+			'method' => 'first_live_broadcast'
 		])
 		@include('example', [
 			'title' => 'Habrahabr users',
-			'source' => $usersSource,
-			'data' => $users
+			'method' => 'users'
 		])
 		@include('example', [
 			'title' => 'Habrahabr search: "php"',
-			'source' => $searchSource,
-			'data' => $search
+			'method' => 'search'
 		])
 	</div>
 
