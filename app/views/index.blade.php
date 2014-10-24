@@ -56,7 +56,17 @@
 			<div id="usage" class="fix-navbar-fixed"></div>
 			<h2>Usage</h2>
 		</div>
-		<p>Extend <code>SleepingOwl\Apist\Apist</code> class and provide base url:</p>
+		<p>Extend <code>SleepingOwl\Apist\Apist</code> class and override <code>getBaseUrl()</code> method:</p>
+		<pre><code class="language-php">use SleepingOwl\Apist\Apist;
+
+class HabrApi extends Apist
+{
+  public function getBaseUrl()
+  {
+    return 'http://habrahabr.ru';
+  }
+}</code></pre>
+		<p>or override <code>$baseUrl</code> field:</p>
 		<pre><code class="language-php">use SleepingOwl\Apist\Apist;
 
 class HabrApi extends Apist
@@ -65,29 +75,7 @@ class HabrApi extends Apist
 }</code></pre>
 
 		<p>Write any api method you want:</p>
-		<pre><code class="language-php">public function index()
-{
-  return $this->get('/', [
-    'title' => Apist::filter('.page_head')->exists()->then(
-      Apist::filter('.page_head .title')->text()->trim()
-    )->else(
-      'Title not found'
-    ),
-    'posts' => Apist::filter('.posts .post')->each([
-      'title'      => Apist::filter('h1.title a')->text(),
-      'link'       => Apist::filter('h1.title a')->attr('href'),
-      'hubs'       => Apist::filter('.hubs a')->each(Apist::filter('*')->text()),
-      'views'      => Apist::filter('.pageviews')->intval(),
-      'favs_count' => Apist::filter('.favs_count')->intval(),
-      'content'    => Apist::filter('.content')->html(),
-      'author'     => [
-        'username'     => Apist::filter('.author a'),
-        'profile_link' => Apist::filter('.author a')->attr('href'),
-        'rating'       => Apist::filter('.author .rating')->text()
-      ]
-    ]),
-  ]);
-}</code></pre>
+		<pre><code class="language-php" data-source="index"></code></pre>
 		<p>Now you can use this api method:</p>
 		<pre><code class="language-php">$api = new HabrApi;
 $result = $api->index();</code></pre>
@@ -100,16 +88,17 @@ $result = $api->index();</code></pre>
 			<div id="documentation" class="fix-navbar-fixed"></div>
 			<h2>Documentation</h2>
 		</div>
-		<p>You can use following methods in your api functions to get data:</p>
+		<h3>Http-requests</h3>
+		<p>You can use following methods in your api functions to get data via http-request:</p>
 		<ul>
-			<li>get</li>
-			<li>head</li>
-			<li>post</li>
-			<li>patch</li>
-			<li>put</li>
-			<li>delete</li>
+			<li><code>get</code></li>
+			<li><code>head</code></li>
+			<li><code>post</code></li>
+			<li><code>patch</code></li>
+			<li><code>put</code></li>
+			<li><code>delete</code></li>
 		</ul>
-		<p>Each method represents http method type that will by used in query.</p>
+		<p><small>(note: each method represents http method type that will by used in query)</small></p>
 		<p>Accepts 3 parameters:</p>
 		<ol>
 			<li><strong>$url</strong> &mdash; url to use in query (relative to base url or absolute)</li>
@@ -135,7 +124,10 @@ $result = $api->index();</code></pre>
 		<h4>Error Handling</h4>
 		<p>If there was an error during request your response data will look like:</p>
 		<pre><code class="language-json" data-call="get404"></code></pre>
-		<h4>Blueprint</h4>
+		<h3>Using without http-requests</h3>
+		<p>You can use <code>parse($content, $blueprint)</code> method to parse content by blueprint without any http-requests.</p>
+
+		<h3>Blueprint</h3>
 		<p>Blueprint represents structure you want to get from api call.
 			It can be array or single <code>Apist::filter()</code> object.
 			To insert value from query result use <code>Apist::filter($cssSelector)</code> method.
@@ -149,50 +141,78 @@ $result = $api->index();</code></pre>
 			<li><code>->first()</code> &mdash; get first element from all elements matches css selector</li>
 			<li><code>->last()</code> &mdash; get last element from all elements matches css selector</li>
 			<li><code>->element()</code> &mdash; get element as <code>Symfony\Component\DomCrawler\Crawler</code> object</li>
+			<li><code>->call($callback)</code> &mdash; use custom callback to modify element</li>
 			<li><code>->each($blueprint)</code> &mdash; replaces itself with array,
 				$blueprint will be parsed within current element<br/>
 				<i>Note: your css selectors within $blueprint will be applied to current element, you don't have to write full selectors</i></li>
+			<li><code>->each($callback)</code> &mdash; replaces itself with array,
+				$callback will be called with ($node, $index) for every node in list.
+				Callback result will be used as array value.</li>
+			<li>You can use any method from your api class</li>
 			<li>You can use simple string methods:
 				<code>trim</code>, <code>strtoupper</code>, <code>strtolower</code>,
 				<code>mb_strtoupper</code>, <code>mb_strtolower</code>,
 				<code>intval</code>, <code>floatval</code> or your own functions in root namespace</li>
 			<li>You can chain methods: <code>Apist::filter('.title')->first()->text()->mb_strtoupper()->trim()</code></li>
 		</ul>
-		<h5>Blueprint Conditionals</h5>
+		<h4>Blueprint Conditionals</h4>
 		<p>You can use conditionals in your blueprints:</p>
 		<pre><code class="language-php">Apist::filter('.page-header')->exists()->then(
   Apist::filter('.page-header .title')->text() // This value will be used if .page-header element was found
 )->else(
   null // This value will be used if .page-header element doesn't exist in html response
 )</code></pre>
+		<p>or use <code>check($callback)</code> method with custom callback:</p>
+		<pre><code class="language-php">Apist::filter('.page-header')->check(function ($node)
+{
+  return $node->text() === 'My Title';
+})->then(...)->else(...)</code></pre>
 		<p><code>then()</code> and <code>else()</code> methods accept blueprint as argument. You can provide array or single item as you want.</p>
 		<p>Using conditionals you can make your api result fully customizable.</p>
-		<h5>Blueprint Examples</h5>
-		<pre><code class="language-php">public function index()
+		<h4>Blueprint Filter Examples</h4>
+
+		<h5>Get href from link</h5>
+		<pre><code class="language-php">Apist::filter('.title_block .title a')->attr('href')</code></pre>
+
+		<h5>Get title text, trim and convert to uppercase</h5>
+		<pre><code class="language-php">Apist::filter('.title')->text()->trim()->mb_strtoupper()</code></pre>
+
+		<h5>Get title and use custom method from your api class</h5>
+		<pre><code class="language-php"># declaration in api class
+public function myFunc($subject, $from, $to)
 {
-  return $this->get('/', [
-    'link'           => Apist::filter('.title_block .title a')->attr('href'), // Get href from link
-    'title'          => Apist::filter('.title')->text()->trim()->mb_strtoupper(), // Get title text, trim and convert to uppercase
-    'second_element' => Apist::filter('.navbar li')->eq(3)->filter('a')->first()->text(), // You can write this with one css selector or use chain methods
-    'custom_css'     => Apist::filter('.navbar li:nth-child(4) a:first-child')->text(), // Same as previous value, remember that eq() starts from zero, but :nth-child() starts from one
-    'items'          => Apist::filter('.navbar li')->each([ // Create array with blueprint for every item
-      'title' => Apist::filter('a')->text(),
-      'link' => Apist::filter('a')->attr('href')
-    ]),
-    'items_flat'     => Apist::filter('.navbar li')->each(Apist::filter('a')->text()), // Create flat array without keys
-    'custom_fields'  => [ // You can use any array structure you want
-      'first'  => 'static field', // and use static field values
-      'second' => Apist::filter('.title')->text(), // combine them with computed as you want
-      'third'  => [
-        'my',
-        'custom',
-        'array',
-        Apist::filter('.title')->text()
-      ],
-      'fourth' => $this->customMethod() // You can use computed values as well
-    ]
-  ]);
-}</code></pre>
+  return str_replace($from, $to, $subject);
+}
+
+# usage in your blueprint
+Apist::filter('.title')->text()->myFunc('find', 'replace')</code></pre>
+
+		<h5>You can write one css selector or use chain methods</h5>
+		<pre><code class="language-php">Apist::filter('.navbar li')->eq(3)->filter('a')->first()->text()</code></pre>
+
+		<h5>Same as previous filter <small>(remember that eq() starts from zero, but :nth-child() starts from one)</small></h5>
+		<pre><code class="language-php">Apist::filter('.navbar li:nth-child(4) a:first-child')->text()</code></pre>
+
+		<h5>Create array with blueprint for every item</h5>
+		<pre><code class="language-php">Apist::filter('.navbar li')->each([
+  'title' => Apist::filter('a')->text(),
+  'link' => Apist::filter('a')->attr('href')
+])</code></pre>
+
+		<h5>Create flat array without keys</h5>
+		<pre><code class="language-php">Apist::filter('.navbar li')->each(Apist::filter('a')->text())</code></pre>
+
+		<h5>You can use any array structure you want</h5>
+		<pre><code class="language-php">[
+  'first'  => 'static field', // and use static field values
+  'second' => Apist::filter('.title')->text(), // combine them with computed as you want
+  'third'  => [
+	'my',
+	'custom',
+	'array',
+	Apist::filter('.title')->text()
+  ]
+]</code></pre>
 
 		<div class="page-header">
 			<div id="examples" class="fix-navbar-fixed"></div>
@@ -218,6 +238,10 @@ $result = $api->index();</code></pre>
 		@include('example', [
 			'title' => 'Habrahabr search: "php"',
 			'method' => 'search'
+		])
+		@include('example', [
+			'title' => 'Parse local file without http-requests',
+			'method' => 'parse_local_file'
 		])
 	</div>
 

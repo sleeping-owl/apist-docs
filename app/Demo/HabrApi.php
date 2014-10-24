@@ -1,17 +1,39 @@
 <?php namespace Demo;
 
+use App;
 use SleepingOwl\Apist\Apist;
 
 class HabrApi extends Apist
 {
 
-	protected $baseUrl = 'http://habrahabr.ru';
+	public function getBaseUrl()
+	{
+		if (App::environment() === 'local')
+		{
+			return 'http://habrahabr.my';
+		} else
+		{
+			return 'http://habrahabr.ru';
+		}
+	}
 
 	public function index()
 	{
 		return $this->get('/', [
-			'title' => Apist::filter('.page_head')->exists()->then(Apist::filter('.page_head .title')->text()->trim())->else('Title not found'),
-			'posts' => Apist::filter('.posts .post')->each([
+			'title'         => Apist::filter('.page_head')->exists()->then(
+				Apist::filter('.page_head .title')->trim()
+			)->else(
+				'Title not found'
+			),
+			'title_updated' => Apist::filter('.page_head .title')->text()->call(function ($title)
+			{
+				return 'Modified Title: ' . $title;
+			}),
+			'posts_list'    => Apist::filter('.posts .post')->each(function ($node, $i)
+			{
+				return ($i + 1) . '. ' . $node->filter('.title a')->text();
+			}),
+			'posts'         => Apist::filter('.posts .post')->each([
 				'title'      => Apist::filter('h1.title a')->text(),
 				'link'       => Apist::filter('h1.title a')->attr('href'),
 				'hubs'       => Apist::filter('.hubs a')->each(Apist::filter('*')->text()),
@@ -112,6 +134,21 @@ class HabrApi extends Apist
 			])
 		], [
 			'query' => ['q' => $query]
+		]);
+	}
+
+	public function parse_local_file()
+	{
+		$content = file_get_contents(app_path('Demo/test.html'));
+		return $this->parse($content, [
+			'menu'     => Apist::filter('.navbar-nav a')->each([
+				'title' => Apist::filter('*')->text()->trim(),
+				'link'  => Apist::filter('*')->attr('href')
+			]),
+			'examples' => Apist::filter('h3')->each(function ($node, $i)
+			{
+				return ($i + 1) . '. ' . $node->text();
+			})
 		]);
 	}
 
