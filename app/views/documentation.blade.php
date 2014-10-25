@@ -156,7 +156,7 @@ Apist::filter('.title')->text()->myFunc('find', 'replace')</code></pre>
 		<h2>Yaml Configuration</h2>
 	</div>
 	<p><strong>Example:</strong> for full-feature demo api class source using yaml see
-		<a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/HabrYmlApi.php">HabrApi.php</a>
+		<a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/HabrYmlApi.php">HabrYmlApi.php</a>
 		and
 		<a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/Api/habr.yml">habr.yml</a>.</p>
 	<p><strong>Important:</strong> to use yaml config you must extends <code>SleepingOwl\Apist\Yaml\YamlApist</code> class.</p>
