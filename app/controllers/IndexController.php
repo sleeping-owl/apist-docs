@@ -3,22 +3,22 @@
 class IndexController extends \Controller
 {
 
-	protected function getFromApi($method, $parameter = null)
+	protected function getFromApi($api, $method, $parameter = null)
 	{
 		$lifetime = 10;
-		$habr = new \Demo\HabrApi;
 
-		$cacheKey = 'habr.' . $method . $parameter;
+		$cacheKey = get_class($api) . $method . $parameter;
 
 		$result = Cache::get($cacheKey);
+		$result = null;
 		if (is_null($result))
 		{
 			if (is_null($parameter))
 			{
-				$result = $habr->$method();
+				$result = $api->$method();
 			} else
 			{
-				$result = $habr->$method($parameter);
+				$result = $api->$method($parameter);
 			}
 			Cache::put($cacheKey, $result, $lifetime);
 		}
@@ -51,16 +51,43 @@ class IndexController extends \Controller
 
 	public function getApiCall($method)
 	{
-		if ( ! method_exists('\Demo\HabrApi', $method)) $method = 'index';
+		if ($args = $this->isYamlMethod($method))
+		{
+			$method = $args['method'];
+			$habr = new \Demo\HabrYmlApi;
+		} else
+		{
+			if ( ! method_exists('\Demo\HabrApi', $method)) $method = 'index';
+			$habr = new \Demo\HabrApi;
+		}
 		$parameter = ($method === 'search') ? 'php' : null;
-		$data = $this->getFromApi($method, $parameter);
+		$data = $this->getFromApi($habr, $method, $parameter);
 		return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 	}
 
 	public function getSource($method)
 	{
-		if ( ! method_exists('\Demo\HabrApi', $method)) $method = 'index';
-		return $this->getMethodSource($method);
+		if ($args = $this->isYamlMethod($method))
+		{
+			return file_get_contents(app_path('Demo/Api/habr.yml'));
+		} else
+		{
+			if ( ! method_exists('\Demo\HabrApi', $method)) $method = 'index';
+			return $this->getMethodSource($method);
+		}
+	}
+
+	/**
+	 * @param $method
+	 * @return int
+	 */
+	protected function isYamlMethod($method)
+	{
+		if (preg_match('/^yaml\.(?<method>.+)$/', $method, $args))
+		{
+			return $args;
+		}
+		return null;
 	}
 
 }

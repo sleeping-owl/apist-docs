@@ -26,4 +26,12 @@ $(function ()
 			$this.text(data);
 		});
 	});
+
+	// select active link in menu
+	(function () {
+		var currentPage = window.location.pathname;
+
+		var currentPageLink = $('.nav a[href="' + currentPage + '"]');
+		currentPageLink.closest('li').addClass('active');
+	})();
 });

@@ -1,0 +1,40 @@
+baseUrl: http://habrahabr.ru
+
+_hub: | text
+
+_post:
+  title: .title a | text
+  link: .title a | attr('href')
+  published_at: .published | text
+  hubs: .hubs a | each(:hub)
+  views: .pageviews | intval
+  favs_count: .favs_count | intval
+  content: .content | html
+  author:
+    username: .author a | text
+    profile_link: .author a | attr('href')
+    rating: .author .rating | text
+
+_index_title: .page_head .title | text | trim
+
+index:
+  url: /
+  blueprint:
+    title: .page_head | exists | then(:index_title) | else('Title not found')
+    index_title: :index_title
+    title_updated: .page_head .title | text | modifyTitle
+    posts_list: .posts .post | each | getPostTitle
+    posts: .posts .post | each(:post)
+
+search:
+  url: /search
+  blueprint:
+    query: $1
+    publications_count: .menu .item:nth-child(1) span | text | intval
+    hubs_count: .menu .item:nth-child(2) span | text | intval
+    users_count: .menu .item:nth-child(3) span | text | intval
+    comments_count: .menu .item:nth-child(4) span | text | intval
+    posts: .post | each (:post)
+  options:
+    query:
+      q: $1
