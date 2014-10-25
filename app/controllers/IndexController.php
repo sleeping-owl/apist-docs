@@ -10,7 +10,6 @@ class IndexController extends \Controller
 		$cacheKey = get_class($api) . $method . $parameter;
 
 		$result = Cache::get($cacheKey);
-		$result = null;
 		if (is_null($result))
 		{
 			if (is_null($parameter))
