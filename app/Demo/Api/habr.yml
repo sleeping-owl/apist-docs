@@ -1,6 +1,6 @@
 baseUrl: http://habrahabr.ru
 
-_hub: | text
+_hub: :current | text
 
 _post:
   title: .title a | text

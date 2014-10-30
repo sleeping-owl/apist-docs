@@ -2,6 +2,7 @@
 
 use App;
 use SleepingOwl\Apist\Apist;
+use SleepingOwl\Apist\DomCrawler\Crawler;
 
 class HabrApi extends Apist
 {
@@ -21,7 +22,7 @@ class HabrApi extends Apist
 	{
 		return $this->get('/', [
 			'title'         => Apist::filter('.page_head')->exists()->then(
-				Apist::filter('.page_head .title')->trim()
+				Apist::filter('.page_head .title')->text()
 			)->else(
 				'Title not found'
 			),
@@ -29,14 +30,16 @@ class HabrApi extends Apist
 			{
 				return 'Modified Title: ' . $title;
 			}),
-			'posts_list'    => Apist::filter('.posts .post')->each(function ($node, $i)
+			'posts_list'    => Apist::filter('.posts .post')->each(function (Crawler $node, $i)
 			{
 				return ($i + 1) . '. ' . $node->filter('.title a')->text();
 			}),
 			'posts'         => Apist::filter('.posts .post')->each([
 				'title'      => Apist::filter('h1.title a')->text(),
 				'link'       => Apist::filter('h1.title a')->attr('href'),
-				'hubs'       => Apist::filter('.hubs a')->each(Apist::filter('*')->text()),
+				'hubs'       => Apist::filter('.hubs a')->each(
+					Apist::current()->text()
+				),
 				'views'      => Apist::filter('.pageviews')->intval(),
 				'favs_count' => Apist::filter('.favs_count')->intval(),
 				'content'    => Apist::filter('.content')->html(),

@@ -66,7 +66,9 @@
 		It can be array or single <code>Apist::filter()</code> object.
 		To insert value from query result use <code>Apist::filter($cssSelector)</code> method.
 		It will search and replace itself with required element from html.</p>
-	<p>You can specify additional data you want to get from element:</p>
+	<p>If you need to grab current node element you can use <code>Apist::current()</code>.</p>
+	<p>You can specify additional data you want to get from element
+		(full list you can see in <a href="https://github.com/sleeping-owl/apist/blob/master/src/SleepingOwl/Apist/Selectors/ApistFilter.php">ApistFilter.php</a>):</p>
 	<ul>
 		<li><code>->text()</code> &mdash; get text content from element</li>
 		<li><code>->html()</code> &mdash; get html content from element</li>
@@ -89,6 +91,10 @@
 			<code>intval</code>, <code>floatval</code> or your own functions in root namespace</li>
 		<li>You can chain methods: <code>Apist::filter('.title')->first()->text()->mb_strtoupper()->trim()</code></li>
 	</ul>
+	<h3>Exception Suppression</h3>
+	<p>By default exception suppression is turned on. Every blueprint filter with exception will be replaced by <code>null</code>.</p>
+	<p>You can disable suppression by (if you want manually catch them):</p>
+	<pre><code class="language-php">$api->setSuppressExceptions(false)</code></pre>
 	<h3>Blueprint Conditionals</h3>
 	<p>You can use conditionals in your blueprints:</p>
 	<pre><code class="language-php">Apist::filter('.page-header')->exists()->then(
@@ -228,6 +234,11 @@ postsList:
 
 getPost:
   post: :post</code></pre>
+  	<p>There is one predefined structure <code>:current</code>. You can use it to get current node. For example:</p>
+	<pre><code class="language-php">_menu_item: :current | text
+	
+postsList:
+  menu: .nav li | each(:menu_item)</code></pre>
 
 	<h3>Method Parameters</h3>
 	<p>You can use <code>$1</code>, <code>$2</code>, ... values in your Yaml file to insert method parameter.
