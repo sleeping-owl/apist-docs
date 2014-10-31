@@ -5,7 +5,7 @@ use SleepingOwl\Apist\Apist;
 class AdminApi extends Apist
 {
 
-	protected $baseUrl = 'http://sleeping-owl-admin.my';
+	protected $baseUrl = 'http://sleeping-owl-admin-demo.gopagoda.com';
 
 	protected $username = 'admin';
 	protected $password = 'SleepingOwl';
