@@ -51,6 +51,10 @@ App::error(function(Exception $exception, $code)
 	Log::error($exception);
 });
 
+App::missing(function() {
+	return Response::view('errors.404', ['lang' => 'en', 'langLabel' => 'English', 'route' => 'index'], 404);
+});
+
 /*
 |--------------------------------------------------------------------------
 | Maintenance Mode Handler
