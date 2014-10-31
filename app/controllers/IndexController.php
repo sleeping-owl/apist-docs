@@ -3,6 +3,11 @@
 class IndexController extends \Controller
 {
 
+	protected $languages = [
+		'en' => 'English',
+		'ru' => 'Russian'
+	];
+
 	protected function getFromApi($api, $method, $parameter = null)
 	{
 		$lifetime = 10;
@@ -10,6 +15,7 @@ class IndexController extends \Controller
 		$cacheKey = get_class($api) . $method . $parameter;
 
 		$result = Cache::get($cacheKey);
+		$result = null;
 		if (is_null($result))
 		{
 			if (is_null($parameter))
@@ -43,9 +49,21 @@ class IndexController extends \Controller
 		return implode("\n", $lines);
 	}
 
-	public function getIndex()
+	protected function make($lang, $view)
 	{
-		return View::make('index');
+		$langLabel = $this->languages[$lang];
+		$route = $view;
+		return View::make($lang . '.' . $view, compact('lang', 'langLabel', 'route'));
+	}
+
+	public function getIndex($lang = 'en')
+	{
+		return $this->make($lang, 'index');
+	}
+
+	public function getDocumentation($lang = 'en')
+	{
+		return $this->make($lang, 'documentation');
 	}
 
 	public function getApiCall($method)

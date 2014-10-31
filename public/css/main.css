@@ -67,3 +67,7 @@ body {
 .hidden-common {
 	display: none;
 }
+
+.navbar-right .dropdown-menu {
+	min-width: 0;
+}

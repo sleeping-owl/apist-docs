@@ -3,10 +3,10 @@ $(function ()
 	$('.toggle').click(function (e)
 	{
 		e.preventDefault();
-		var $this = $(this);
-		$this.parent().next().slideToggle();
+		$(this).parent().next().slideToggle();
 	});
 
+	var timeout;
 	$('[data-call],[data-source]').each(function ()
 	{
 		var $this = $(this);
@@ -24,14 +24,26 @@ $(function ()
 		$.get(url + method, function (data)
 		{
 			$this.text(data);
+			if (timeout) clearTimeout(timeout);
+			timeout = setTimeout(function () {
+				hljs.initHighlighting.called = false;
+				hljs.initHighlighting();
+			}, 500);
 		});
 	});
 
-	// select active link in menu
-	(function () {
-		var currentPage = window.location.pathname;
+	var selectCurrentLink = function ()
+	{
+		var currentPage = window.location.href;
 
+		$('.nav:first li.active').removeClass('active');
 		var currentPageLink = $('.nav a[href="' + currentPage + '"]');
 		currentPageLink.closest('li').addClass('active');
-	})();
+	};
+
+	$('.nav:first li').click(function ()
+	{
+		setTimeout(selectCurrentLink, 100);
+	});
+	selectCurrentLink();
 });

@@ -12,19 +12,13 @@
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
-				<a id="top" class="navbar-brand navbar-brand-active" href="/">SleepingOwl
+				<a id="top" class="navbar-brand navbar-brand-active" href="{{ route('index', $lang) }}">SleepingOwl
 					Apist</a>
 			</div>
-			<div class="collapse navbar-collapse navbar-bb-collapse">
-				<ul class="nav navbar-nav">
-					<li><a href="/#overview">Overview</a></li>
-					<li><a href="/#installation">Installation</a></li>
-					<li><a href="/#usage">Usage</a></li>
-					<li><a href="/#examples">Examples</a></li>
-					<li><a href="/documentation">Documentation</a></li>
-					<li><a href="https://github.com/sleeping-owl/apist"><i class="fa fa-github"></i> GitHub</a></li>
-				</ul>
-			</div>
+			<ul class="nav navbar-nav">
+				@include($lang . '.menu')
+			</ul>
+			@include('_partials.lang_control')
 		</div>
 	</div>
 
@@ -37,6 +31,7 @@
 	</div>
 
 	{{ HTML::script('js/jquery-1.11.0.js') }}
+	{{ HTML::script('js/bootstrap.min.js') }}
 	{{ HTML::script('js/highlight.min.js') }}
 	{{ HTML::script('js/main.js') }}
 	<script>hljs.initHighlightingOnLoad();</script>

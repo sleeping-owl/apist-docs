@@ -33,17 +33,17 @@
 
 class HabrApi extends Apist
 {
-public function getBaseUrl()
-{
-return 'http://habrahabr.ru';
-}
+  public function getBaseUrl()
+  {
+    return 'http://habrahabr.ru';
+  }
 }</code></pre>
 	<p>or override <code>$baseUrl</code> field:</p>
 	<pre><code class="language-php">use SleepingOwl\Apist\Apist;
 
 class HabrApi extends Apist
 {
-protected $baseUrl = 'http://habrahabr.ru';
+  protected $baseUrl = 'http://habrahabr.ru';
 }</code></pre>
 
 	<p>Write any api method you want:</p>

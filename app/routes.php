@@ -1,6 +1,22 @@
 <?php
 
-Route::get('/', 'IndexController@getIndex');
-Route::get('/documentation', 'DocsController@getIndex');
+Route::group([
+	'prefix' => '{lang?}',
+	'where'  => [
+		'lang' => 'en|ru'
+	],
+], function ()
+{
+	Route::get('/', [
+		'as'   => 'index',
+		'uses' => 'IndexController@getIndex'
+	]);
+	Route::get('documentation', [
+		'as'   => 'documentation',
+		'uses' => 'IndexController@getDocumentation'
+	]);
+});
+
+
 Route::get('/call/{method}', 'IndexController@getApiCall');
 Route::get('/source/{method}', 'IndexController@getSource');

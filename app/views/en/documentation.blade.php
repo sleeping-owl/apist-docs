@@ -131,7 +131,7 @@ Apist::filter('.title')->text()->myFunc('find', 'replace')</code></pre>
 	<pre><code class="language-php">Apist::filter('.navbar li')->eq(3)->filter('a')->first()->text()</code></pre>
 
 	<h5>Same as previous filter <small>(remember that eq() starts from zero, but :nth-child() starts from one)</small></h5>
-	<pre><code class="language-php">Apist::filter('.navbar li:nth-child(4) a:first-child')->text()</code></pre>
+	<pre><code class="language-php">Apist::filter('.navbar li:nth-child(4) a:first')->text()</code></pre>
 
 	<h5>Create array with blueprint for every item</h5>
 	<pre><code class="language-php">Apist::filter('.navbar li')->each([
