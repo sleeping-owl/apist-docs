@@ -31,25 +31,25 @@
 	<p>Extend <code>SleepingOwl\Apist\Apist</code> class and override <code>getBaseUrl()</code> method:</p>
 	<pre><code class="language-php">use SleepingOwl\Apist\Apist;
 
-class HabrApi extends Apist
+class WikiApi extends Apist
 {
   public function getBaseUrl()
   {
-    return 'http://habrahabr.ru';
+    return 'http://en.wikipedia.org';
   }
 }</code></pre>
 	<p>or override <code>$baseUrl</code> field:</p>
 	<pre><code class="language-php">use SleepingOwl\Apist\Apist;
 
-class HabrApi extends Apist
+class WikiApi extends Apist
 {
-  protected $baseUrl = 'http://habrahabr.ru';
+  protected $baseUrl = 'http://en.wikipedia.org';
 }</code></pre>
 
 	<p>Write any api method you want:</p>
 	<pre><code class="language-php" data-source="index"></code></pre>
 	<p>Now you can use this api method:</p>
-	<pre><code class="language-php">$api = new HabrApi;
+	<pre><code class="language-php">$api = new WikiApi;
 $result = $api->index();</code></pre>
 
 	<p>Result will be:</p>
@@ -61,27 +61,11 @@ $result = $api->index();</code></pre>
 	</div>
 
 	@include('example', [
-		'title' => 'Habrahabr index',
+		'title' => 'Wikipedia Main Page',
 		'method' => 'index'
 	])
 	@include('example', [
-		'title' => 'Habrahabr live broadcasts',
-		'method' => 'live_broadcasts'
-	])
-	@include('example', [
-		'title' => 'Habrahabr first live broadcast post',
-		'method' => 'first_live_broadcast'
-	])
-	@include('example', [
-		'title' => 'Habrahabr users',
-		'method' => 'users'
-	])
-	@include('example', [
-		'title' => 'Habrahabr search: "php"',
-		'method' => 'search'
-	])
-	@include('example', [
-		'title' => 'Parse local file without http-requests',
-		'method' => 'parse_local_file'
+		'title' => 'Wikipedia Current Events',
+		'method' => 'current_events'
 	])
 @stop

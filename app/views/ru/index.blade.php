@@ -31,25 +31,25 @@
 	<p>Создайте свой класс, расширяющий <code>SleepingOwl\Apist\Apist</code> и создайте метод <code>getBaseUrl()</code>:</p>
 	<pre><code class="language-php">use SleepingOwl\Apist\Apist;
 
-class HabrApi extends Apist
+class WikiApi extends Apist
 {
   public function getBaseUrl()
   {
-    return 'http://habrahabr.ru';
+    return 'http://en.wikipedia.org';
   }
 }</code></pre>
 	<p>или переопределите поле <code>$baseUrl</code>:</p>
 	<pre><code class="language-php">use SleepingOwl\Apist\Apist;
 
-class HabrApi extends Apist
+class WikiApi extends Apist
 {
-  protected $baseUrl = 'http://habrahabr.ru';
+  protected $baseUrl = 'http://en.wikipedia.org';
 }</code></pre>
 
 	<p>Опишите нужные вам api-методы:</p>
 	<pre><code class="language-php" data-source="index"></code></pre>
 	<p>Теперь вы можете их использовать:</p>
-	<pre><code class="language-php">$api = new HabrApi;
+	<pre><code class="language-php">$api = new WikiApi;
 $result = $api->index();</code></pre>
 
 	<p>Полученный результат будет:</p>
@@ -61,27 +61,11 @@ $result = $api->index();</code></pre>
 	</div>
 
 	@include('example', [
-		'title' => 'Главная страница хабрахабра',
+		'title' => 'Главная страница Википедии',
 		'method' => 'index'
 	])
 	@include('example', [
-		'title' => 'Что обсуждают на хабрахабре',
-		'method' => 'live_broadcasts'
-	])
-	@include('example', [
-		'title' => 'Текущий самый обсуждаемый пост на хабрахабре',
-		'method' => 'first_live_broadcast'
-	])
-	@include('example', [
-		'title' => 'Список пользователей хабрахабра',
-		'method' => 'users'
-	])
-	@include('example', [
-		'title' => 'Поиск по хабрахабру: "php"',
-		'method' => 'search'
-	])
-	@include('example', [
-		'title' => 'Использование с локальным данными без http-запросов',
-		'method' => 'parse_local_file'
+		'title' => 'Текущие события Википедии',
+		'method' => 'current_events'
 	])
 @stop

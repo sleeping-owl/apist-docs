@@ -1,0 +1,27 @@
+baseUrl: http://en.wikipedia.org
+
+_portal:
+  link: :current | attr('href') | portalLink
+  label: :current | text
+
+_language:
+  label: :current | text
+  lang: :current | attr('title')
+  link: :current | attr('href') | prependHttp
+
+index:
+  url: /wiki/Main_Page
+  blueprint:
+    welcome_message: "#mp-topbanner div:first | mb_substr(0, -1)"
+    portals: a[title^="Portal:"] | each(:portal)
+    languages: "#p-lang li a[title] | each(:language)"
+    sister_projects: "#mp-sister b a | each | text"
+    featured_article: "#mp-tfa | html"
+
+_event:
+  date: .bday | text
+  events: dl | each | text
+
+current_events:
+  url: /wiki/Portal:Current_events
+  blueprint: "#mw-content-text > table:last td:first table.vevent | each(:event)"

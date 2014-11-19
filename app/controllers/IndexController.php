@@ -31,7 +31,7 @@ class IndexController extends \Controller
 
 	protected function getMethodSource($method)
 	{
-		$reflection = new ReflectionMethod('\Demo\HabrApi', $method);
+		$reflection = new ReflectionMethod('\Demo\WikiApi', $method);
 		$filename = $reflection->getFileName();
 		$start = $reflection->getStartLine();
 		$end = $reflection->getEndLine();
@@ -70,14 +70,14 @@ class IndexController extends \Controller
 		if ($args = $this->isYamlMethod($method))
 		{
 			$method = $args['method'];
-			$habr = new \Demo\HabrYmlApi;
+			$wiki = new \Demo\WikiYmlApi;
 		} else
 		{
-			if ( ! method_exists('\Demo\HabrApi', $method)) $method = 'index';
-			$habr = new \Demo\HabrApi;
+			if ( ! method_exists('\Demo\WikiApi', $method)) $method = 'index';
+			$wiki = new \Demo\WikiApi;
 		}
 		$parameter = ($method === 'search') ? 'php' : null;
-		$data = $this->getFromApi($habr, $method, $parameter);
+		$data = $this->getFromApi($wiki, $method, $parameter);
 		return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 	}
 
@@ -85,10 +85,10 @@ class IndexController extends \Controller
 	{
 		if ($args = $this->isYamlMethod($method))
 		{
-			return file_get_contents(app_path('Demo/Api/habr.yml'));
+			return file_get_contents(app_path('Demo/Api/wiki.yml'));
 		} else
 		{
-			if ( ! method_exists('\Demo\HabrApi', $method)) $method = 'index';
+			if ( ! method_exists('\Demo\WikiApi', $method)) $method = 'index';
 			return $this->getMethodSource($method);
 		}
 	}

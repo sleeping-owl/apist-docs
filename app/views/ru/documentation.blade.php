@@ -61,7 +61,7 @@
 		<div id="php-blueprint" class="fix-navbar-fixed"></div>
 		<h2>PHP схема</h2>
 	</div>
-	<p><strong>Пример:</strong> исходный код работающего примера можно посмотреть в файле <a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/HabrApi.php">HabrApi.php</a>.</p>
+	<p><strong>Пример:</strong> исходный код работающего примера можно посмотреть в файле <a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/Wiki.php">WikiApi.php</a>.</p>
 	<p>Схема представляет собой структуру, которую вы хотите получить в результате вызова api-метода.
 		Она может быть массивом фильтров или одиночным фильтром <code>Apist::filter()</code>.
 		Чтобы вставить значение из результата запроса используйте метод <code>Apist::filter($cssSelector)</code>.
@@ -160,9 +160,9 @@ Apist::filter('.title')->text()->myFunc('find', 'replace')</code></pre>
 		<h2>Yaml схема</h2>
 	</div>
 	<p><strong>Пример:</strong> исходный код работающего примера можно посмотреть в файле
-		<a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/HabrYmlApi.php">HabrYmlApi.php</a>
+		<a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/WikiYmlApi.php">WikiYmlApi.php</a>
 		и
-		<a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/Api/habr.yml">habr.yml</a>.</p>
+		<a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/Api/wiki.yml">wiki.yml</a>.</p>
 	<p><strong>Важно:</strong> для использования yaml схемы вам необходимо расширять класс <code>SleepingOwl\Apist\Yaml\YamlApist</code>.</p>
 	<p>Для загрузки схемы из yaml-файла вам необходимо описать конструктор в вашем классе:</p>
 	<pre><code class="language-php">function __construct($options = [])
@@ -253,12 +253,12 @@ postsList:
 		<h2>Примеры</h2>
 	</div>
 	@include('example', [
-		'title' => 'Главная страница хабрахабра',
+		'title' => 'Главная страница Википедии',
 		'method' => 'yaml.index'
 	])
 	@include('example', [
-		'title' => 'Поиск по хабрахабру: "php"',
-		'method' => 'yaml.search'
+		'title' => 'Текущие события Википедии',
+		'method' => 'yaml.current_events'
 	])
 
 @stop

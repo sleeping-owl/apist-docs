@@ -61,7 +61,7 @@
 		<div id="php-blueprint" class="fix-navbar-fixed"></div>
 		<h2>PHP Blueprint</h2>
 	</div>
-	<p><strong>Example:</strong> for full-feature demo api class source see <a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/HabrApi.php">HabrApi.php</a>.</p>
+	<p><strong>Example:</strong> for full-feature demo api class source see <a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/WikiApi.php">WikiApi.php</a>.</p>
 	<p>Blueprint represents structure you want to get from api call.
 		It can be array or single <code>Apist::filter()</code> object.
 		To insert value from query result use <code>Apist::filter($cssSelector)</code> method.
@@ -162,9 +162,9 @@ Apist::filter('.title')->text()->myFunc('find', 'replace')</code></pre>
 		<h2>Yaml Configuration</h2>
 	</div>
 	<p><strong>Example:</strong> for full-feature demo api class source using yaml see
-		<a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/HabrYmlApi.php">HabrYmlApi.php</a>
+		<a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/WikiYmlApi.php">WikiYmlApi.php</a>
 		and
-		<a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/Api/habr.yml">habr.yml</a>.</p>
+		<a href="https://github.com/sleeping-owl/apist-docs/blob/master/app/Demo/Api/wiki.yml">wiki.yml</a>.</p>
 	<p><strong>Important:</strong> to use yaml config you must extends <code>SleepingOwl\Apist\Yaml\YamlApist</code> class.</p>
 	<p>To load api configuration from Yaml file you must override constructor in your class:</p>
 	<pre><code class="language-php">function __construct($options = [])
@@ -255,12 +255,12 @@ postsList:
 		<h2>Examples</h2>
 	</div>
 	@include('example', [
-		'title' => 'Habrahabr index',
+		'title' => 'Wikipedia Main Page',
 		'method' => 'yaml.index'
 	])
 	@include('example', [
-		'title' => 'Habrahabr search',
-		'method' => 'yaml.search'
+		'title' => 'Wikipedia Current Events',
+		'method' => 'yaml.current_events'
 	])
 
 @stop
