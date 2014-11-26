@@ -8,6 +8,11 @@ class IndexController extends \Controller
 		'ru' => 'Russian'
 	];
 
+	protected $syntaxes = [
+		'ruby' => 'Ruby',
+		'php' => 'PHP'
+	];
+
 	protected function getFromApi($api, $method, $parameter = null)
 	{
 		$lifetime = 10;
@@ -48,21 +53,26 @@ class IndexController extends \Controller
 		return implode("\n", $lines);
 	}
 
-	protected function make($lang, $view)
+	protected function make($lang, $view, $syntax = null)
 	{
 		$langLabel = $this->languages[$lang];
+		$syntaxLabel = is_null($syntax) ? null : $this->syntaxes[$syntax];
 		$route = $view;
-		return View::make($lang . '.' . $view, compact('lang', 'langLabel', 'route'));
+		if (in_array($view, ['index', 'documentation']))
+		{
+			$view = $syntax . '.' . $view;
+		}
+		return View::make($lang . '.' . $view, compact('lang', 'langLabel', 'route', 'syntax', 'syntaxLabel'));
 	}
 
-	public function getIndex($lang = 'en')
+	public function getIndex($lang, $syntax)
 	{
-		return $this->make($lang, 'index');
+		return $this->make($lang, 'index', $syntax);
 	}
 
-	public function getDocumentation($lang = 'en')
+	public function getDocumentation($lang, $syntax)
 	{
-		return $this->make($lang, 'documentation');
+		return $this->make($lang, 'documentation', $syntax);
 	}
 
 	public function getApiCall($method)
@@ -86,11 +96,19 @@ class IndexController extends \Controller
 		if ($args = $this->isYamlMethod($method))
 		{
 			return file_get_contents(app_path('Demo/Api/wiki.yml'));
+		} elseif ($this->isRubyMethod($method))
+		{
+			return file_get_contents(app_path('Demo/ruby/basic.rb'));
 		} else
 		{
 			if ( ! method_exists('\Demo\WikiApi', $method)) $method = 'index';
 			return $this->getMethodSource($method);
 		}
+	}
+
+	protected function isRubyMethod($method)
+	{
+		return strpos($method, 'ruby.') === 0;
 	}
 
 	/**
@@ -104,6 +122,11 @@ class IndexController extends \Controller
 			return $args;
 		}
 		return null;
+	}
+
+	public function getChoose($lang = 'en')
+	{
+		return $this->make($lang, 'choose')->with('syntaxes', $this->syntaxes);
 	}
 
 }

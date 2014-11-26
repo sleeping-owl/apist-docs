@@ -28,8 +28,8 @@
 	<p>Accepts 3 parameters:</p>
 	<ol>
 		<li><strong>$url</strong> &mdash; url to use in query (relative to base url or absolute)</li>
-		<li><strong>$blueprint</strong> &mdash; array or single object parsing rules</li>
-		<li><strong>$options</strong> <small>(optional)</small> &mdash; any additional options to use in query.</li>
+		<li><strong>$blueprint</strong> &mdash; array or single object of parsing rules</li>
+		<li><strong>$options</strong> <small>(optional)</small> &mdash; any additional options to use in query</li>
 	</ol>
 	<h3>Providing Get and Post parameters</h3>
 	<p>You can provide get parameters to the query in optional third <code>$options</code> parameter:</p>

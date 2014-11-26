@@ -1,7 +1,23 @@
 <?php
 
+Route::get('/', function ()
+{
+	return Redirect::route('index', ['lang' => 'en']);
+});
+
+Route::get('documentation', function ()
+{
+	return Redirect::route('index', ['lang' => 'en']);
+});
+
+
+Route::get('{lang}', [
+	'as'   => 'choose',
+	'uses' => 'IndexController@getChoose'
+])->where('lang', 'en|ru');
+
 Route::group([
-	'prefix' => '{lang?}',
+	'prefix' => '{lang}/{syntax}',
 	'where'  => [
 		'lang' => 'en|ru'
 	],
@@ -16,8 +32,6 @@ Route::group([
 		'uses' => 'IndexController@getDocumentation'
 	]);
 });
-
-Route::get('documentation', 'IndexController@getDocumentation');
 
 Route::get('/call/{method}', 'IndexController@getApiCall');
 Route::get('/source/{method}', 'IndexController@getSource');

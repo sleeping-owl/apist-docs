@@ -99,7 +99,7 @@
 	<pre><code class="language-php">Apist::filter('.page-header')->exists()->then(
   Apist::filter('.page-header .title')->text() // Это значение будет использовано если элемент .page-header был найден
 )->else(
-  null // Это значение будет использовано если элемент .page-header не был найден
+  null // Это значение будет использовано если элемент .page-header был найден
 )</code></pre>
 	<p>или используйте метод <code>check($callback)</code> с произволным замыканием:</p>
 	<pre><code class="language-php">Apist::filter('.page-header')->check(function ($node)

@@ -71,3 +71,7 @@ body {
 .navbar-right .dropdown-menu {
 	min-width: 0;
 }
+
+.language-select {
+	margin: 50px 0;
+}
